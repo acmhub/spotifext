@@ -9,11 +9,14 @@ import {
     PlusCircleIcon
 } from '@heroicons/react/24/outline';
 import useSpotify from '../hooks/useSpotify';
+import { useRecoilState } from 'recoil';
+import { playlistIdState } from '../atoms/playlistAtoms';
 
 export default function Sidebar() {
     const spotifyApi = useSpotify();
     const { data: session, status } = useSession();
     const [playlists, setPlaylists] = useState([]);
+    const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
 
     useEffect(() => {
         if (spotifyApi.getAccessToken()) {
@@ -58,7 +61,9 @@ export default function Sidebar() {
 
                 {/* Playlists */}
                 {playlists.map((playlist) => (
-                    <p className="hover:text-white">{playlist.name}</p>
+                    <p className="hover:text-white" onClick={() => setPlaylistId(playlist.id)} key={playlist.id}>
+                        {playlist.name}
+                    </p>
                 ))}
             </div>
         </div>
